@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 1. Bean A со свойством Placeholder -->
+    <bean id="a" class="org.example.A">
+        <property name="property" value="${property.value}" />
+    </bean>
+
+    <!-- Placeholder configuration -->
+    <context:property-placeholder location="classpath:properties.properties"/>
+
+    <!-- 2. Bean B с Bean A в качестве аргумента конструктора -->
+    <bean id="b" class="org.example.B">
+        <constructor-arg ref="a"/>
+    </bean>
+
+    <!-- 3. Bean C и D с методом Lookup -->
+    <bean id="c" class="org.example.C" scope="singleton">
+        <lookup-method name="getD" bean="d"/>
+    </bean>
+
+    <bean id="d" class="org.example.D" scope="prototype"/>
+
+    <!-- 4. Bean E с методом Replacement -->
+    <bean id="e" class="org.example.E">
+        <replaced-method name="methodToReplace" replacer="replacerBean"/>
+    </bean>
+
+    <bean id="replacerBean" class="org.example.ReplacerMethod"/>
+
+    <!-- 5. lifecycle Bean F  -->
+    <bean id="f" class="org.example.F" init-method="stepInit" destroy-method="stepDestroy"/>
+
+</beans>
